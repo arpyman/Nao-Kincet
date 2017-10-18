@@ -18,13 +18,13 @@ class Nao:
         self.motionProxy.setStiffnesses("Body", 0.0) #vypnutie motorov		
     def Set(self,command):	
         self.postureProxy.post.goToPosture(command, 0.5)	#Stand
-													#StandInit
-													#StandZero
-													#Crouch
-													#Sit
-													#SitRelax
-													#LyingBelly
-													#LyingBack	
+													        #StandInit
+													        #StandZero
+													        #Crouch
+													        #Sit
+													        #SitRelax
+													        #LyingBelly
+													        #LyingBack	
     def Move(self,kolko):	#v metroch
         self.motionProxy.moveInit()
         self.motionProxy.post.moveTo(kolko, 0, 0)
