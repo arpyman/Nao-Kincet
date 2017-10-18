@@ -6,3 +6,4 @@ Ovládanie robota Nao pomocou Kinectu, ktorý zachytáva gestá.
 
 * **KinectGestures** - Kód na zachytenie giest
 * **NaoKinectWebApp** - Webová aplikácia - komunikácia medzi kinectom a Naom
+* **NaoPython** - Kód pre robota
