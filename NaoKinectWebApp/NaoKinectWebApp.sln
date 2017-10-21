@@ -1,9 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.27004.2002
+VisualStudioVersion = 15.0.27004.2005
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NaoKinectWebApp", "NaoKinectWebApp\NaoKinectWebApp.csproj", "{BA831C65-EC4E-4D9F-94A4-6277307F7D5C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NaoKinectWebApp", "NaoKinectWebApp\NaoKinectWebApp.csproj", "{15AA787E-EF9A-4D10-9EC2-C0B4E8DE1A3C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,15 +11,15 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{BA831C65-EC4E-4D9F-94A4-6277307F7D5C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{BA831C65-EC4E-4D9F-94A4-6277307F7D5C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{BA831C65-EC4E-4D9F-94A4-6277307F7D5C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{BA831C65-EC4E-4D9F-94A4-6277307F7D5C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{15AA787E-EF9A-4D10-9EC2-C0B4E8DE1A3C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{15AA787E-EF9A-4D10-9EC2-C0B4E8DE1A3C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{15AA787E-EF9A-4D10-9EC2-C0B4E8DE1A3C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{15AA787E-EF9A-4D10-9EC2-C0B4E8DE1A3C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {6EA37D22-EC48-4FBE-AF4E-659A188184F7}
+		SolutionGuid = {FC3BA60B-3ECA-401C-AED1-B0C83AD13EC4}
 	EndGlobalSection
 EndGlobal
