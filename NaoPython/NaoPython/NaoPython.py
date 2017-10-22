@@ -1,4 +1,5 @@
 from naoqi import ALProxy
+import requests
 
 #def main():
 #    robot_ip = "192.168.0.110"
@@ -8,6 +9,7 @@ from naoqi import ALProxy
 
 class Nao:
     def __init__(self, robot_ip):
+        self.DefineCommands()
         self.postureProxy = ALProxy("ALRobotPosture", robot_ip, 9559)	#Positions
         self.motionProxy = ALProxy("ALMotion", robot_ip, 9559)	#Move
         self.tts = ALProxy("ALTextToSpeech", robot_ip , 9559)	#Say
@@ -16,7 +18,7 @@ class Nao:
         self.motionProxy.setStiffnesses("Body", 1.0)  #zaseknutie klbov (aby sa mohol hybat)
     def StiffnessOff(self):
         self.motionProxy.setStiffnesses("Body", 0.0) #vypnutie motorov		
-    def Set(self,command):	
+    def Set(self,command):
         self.postureProxy.post.goToPosture(command, 0.5)	#Stand
 													        #StandInit
 													        #StandZero
@@ -33,16 +35,41 @@ class Nao:
         self.motionProxy.moveInit()
         self.motionProxy.post.moveTo(kolko, x, y)
 
-    def	Stop(self):
-        self.self.motionProxy.stopMove()
-
     def Say(self,text):
         self.tts.say(text)
-	
 
+    # Dictionary commands
+    def DefineCommands(self):
+        self.Commands = {b'JoinedHands' : self.Stop,    # STOP
+                         b'SwipeUp' : self.Stand,       # STAND
+                         b'ZoomIn' : self.Sit,          # SIT
+                         #b'WaveRight' : "",             # WAVE RIGHT
+                         #b'WaveLeft' : "",              # WAVE LEFT
+                         #b'ZoomOut' : "",               # MOVE FORWARD
+                         #b'SwipeLeft' : "",             # MOVE/TURN LEFT
+                         #b'SwipeRight' : "",            # MOVE/TURN RIGHT
+        }
+    def	Stop(self):
+        self.self.motionProxy.stopMove()
+    def Stand(self):
+        self.Set("Stand")
+    def Sit(self):
+        self.Set("Sit")
+
+	
+data_url = "http://naokinect.azurewebsites.net/Data"
 robot_ip = "192.168.0.110"
 nao = Nao(robot_ip)
 nao.StiffnessOn()
+
+try:
+    r = requests.get(data_url)
+    nao.Commands[r.content]()
+except Exception, e:
+    print("Error: " + str(e))
+
+
+
 #if __name__ == "__main__":
 #	main()
 
