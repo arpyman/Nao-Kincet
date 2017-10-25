@@ -1,11 +1,25 @@
 from naoqi import ALProxy
 import requests
+import time
 
-#def main():
-#    robot_ip = "192.168.0.110"
-#    #robot_ip = "127.0.0.1"
-#    nao = Nao(robot_ip)
-#    nao.StiffnessOn()
+def main():
+    robot_ip = "192.168.0.110"
+    data_url = "http://naokinect.azurewebsites.net/Data"
+
+   # nao = Nao(robot_ip)
+    #nao.StiffnessOn()
+
+    while 1:
+        try:
+            r = requests.get(data_url)
+           # nao.Commands[r.content]()
+            print(r.content)
+            time.sleep(0.1)
+        except Exception, e:
+            print("Error: " + str(e))
+            time.sleep(1)
+
+
 
 class Nao:
     def __init__(self, robot_ip):
@@ -57,21 +71,10 @@ class Nao:
         self.Set("Sit")
 
 	
-data_url = "http://naokinect.azurewebsites.net/Data"
-robot_ip = "192.168.0.110"
-nao = Nao(robot_ip)
-nao.StiffnessOn()
-
-try:
-    r = requests.get(data_url)
-    nao.Commands[r.content]()
-except Exception, e:
-    print("Error: " + str(e))
 
 
-
-#if __name__ == "__main__":
-#	main()
+if __name__ == "__main__":
+	main()
 
 '''
 robot_ip = "127.0.0.1"
