@@ -14,6 +14,8 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using LightBuzz.Vitruvius;
 using Microsoft.Kinect;
+using System.Net;
+using System.IO;
 
 namespace KinectGestures
 {
@@ -22,54 +24,77 @@ namespace KinectGestures
     /// </summary>
     public partial class MainWindow : Window
     {
-        KinectSensor _sensor;
-        MultiSourceFrameReader _reader;
-        GestureController _gestureController;
+        KinectSensor sensor;
+        MultiSourceFrameReader reader;
+        GestureController gestureController;
 
         public MainWindow()
         {
             InitializeComponent();
 
-            _sensor = KinectSensor.GetDefault();
+            string url = @"http://naokinect.azurewebsites.net/Data?sending=";
+            string data = "test222";
+            WebRequest.Create(url+data).GetResponse();
 
-            if (_sensor != null)
+            /*
+            WebRequest wrGETURL;
+            wrGETURL = WebRequest.Create(url);
+            
+            using (Stream objStream = wrGETURL.GetResponse().GetResponseStream())
             {
-                _sensor.Open();
+                using (StreamReader objReader = new StreamReader(objStream))
+                {
+                    string sLine = "";
+                    int i = 0;
 
-                _reader = _sensor.OpenMultiSourceFrameReader(FrameSourceTypes.Color | FrameSourceTypes.Depth | FrameSourceTypes.Infrared | FrameSourceTypes.Body);
-                _reader.MultiSourceFrameArrived += Reader_MultiSourceFrameArrived;
+                    while (sLine != null)
+                    {
+                        i++;
+                        sLine = objReader.ReadLine();
+                        if (sLine != null)
+                            Console.WriteLine("{0}:{1}", i, sLine);
+                    }
+                    Console.ReadLine();
+                }                    
+            }
+            */
 
-                _gestureController = new GestureController();
-                _gestureController.GestureRecognized += GestureController_GestureRecognized;
+
+
+            // Initialize
+            sensor = KinectSensor.GetDefault();
+            if (sensor != null)
+            {
+                sensor.Open();
+
+                reader = sensor.OpenMultiSourceFrameReader(FrameSourceTypes.Color | FrameSourceTypes.Depth | FrameSourceTypes.Infrared | FrameSourceTypes.Body);
+                reader.MultiSourceFrameArrived += Reader_MultiSourceFrameArrived;
+
+                gestureController = new GestureController();
+                gestureController.GestureRecognized += GestureController_GestureRecognized;
             }
         }
 
         void Reader_MultiSourceFrameArrived(object sender, MultiSourceFrameArrivedEventArgs e)
         {
             var reference = e.FrameReference.AcquireFrame();
-
             // Color
             using (var frame = reference.ColorFrameReference.AcquireFrame())
             {
-                if (frame != null)
+                if (frame != null && viewer.Visualization == Visualization.Color)
                 {
-                    if (viewer.Visualization == Visualization.Color)
-                    {
-                        viewer.Image = frame.ToBitmap();
-                    }
+                    viewer.Image = frame.ToBitmap();
                 }
             }
-
             // Body
             using (var frame = reference.BodyFrameReference.AcquireFrame())
             {
                 if (frame != null)
                 {
                     Body body = frame.Bodies().Closest();
-
                     if (body != null)
                     {
-                        _gestureController.Update(body);
+                        gestureController.Update(body);
                     }
                 }
             }
