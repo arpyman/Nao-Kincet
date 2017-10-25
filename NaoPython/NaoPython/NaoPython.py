@@ -3,16 +3,17 @@ import requests
 import time
 
 def main():
-    robot_ip = "192.168.0.110"
+    #robot_ip = "192.168.0.110"
+    robot_ip = "127.0.0.1"
     data_url = "http://naokinect.azurewebsites.net/Data"
 
-   # nao = Nao(robot_ip)
-    #nao.StiffnessOn()
+    nao = Nao(robot_ip)
+    nao.StiffnessOn()
 
     while 1:
         try:
             r = requests.get(data_url)
-           # nao.Commands[r.content]()
+            nao.Commands[r.content]()
             print(r.content)
             time.sleep(0.1)
         except Exception, e:
@@ -52,13 +53,51 @@ class Nao:
     def Say(self,text):
         self.tts.say(text)
 
+    def Wave(self, hand):
+        names = list()
+        times = list()
+        keys = list()
+        if (hand == "left" ):
+            names.append("LElbowRoll")
+            names.append("LElbowYaw")
+            names.append("LShoulderRoll")
+            names.append("LShoulderPitch")
+        else:
+            names.append("RElbowRoll")
+            names.append("RElbowYaw")
+            names.append("RShoulderRoll")
+            names.append("RShoulderPitch")
+
+        #ElbowRoll
+        times.append([ 0.64000, 1.40000, 1.68000, 2.08000, 2.40000, 2.64000, 3.04000, 3.32000, 3.72000, 4.44000, 5.4000])
+        keys.append([ 1.38524, 0.24241, 0.34907, 0.93425, 0.68068, 0.19199, 0.26180, 0.70722, 1.01927, 1.26559, 0.41539])
+
+        #ElbowYaw
+        times.append([ 0.64000, 1.40000, 2.08000, 2.64000, 3.32000, 3.72000, 4.44000, 5.4000])
+        keys.append([ -0.31298, 0.56447, 0.39113, 0.34818, 0.38192, 0.97738, 0.82678, 0.41539])
+
+        #ShoulderRoll
+        times.append([ 0.64000, 1.40000, 2.08000, 2.64000, 3.32000, 4.44000, 5.4000])
+        keys.append([ -0.24241, -0.95419, -0.46024, -0.96033, -0.32832, -0.25008, -0.13265])
+
+        #ShoulderPitch
+        times.append([ 0.64000, 1.40000, 2.08000, 2.64000, 3.32000, 4.44000, 5.4000])
+        keys.append([ 0.24702, -1.17193, -1.08910, -1.26091, -1.14892, 1.02015, 1.48178])
+
+        if (hand == "left" ):
+            for i in range(0,3):
+                keys[i] = [-x for x in keys[i]]
+
+        self.motionProxy.angleInterpolation(names, keys, times, True);
+
+
     # Dictionary commands
     def DefineCommands(self):
         self.Commands = {b'JoinedHands' : self.Stop,    # STOP
                          b'SwipeUp' : self.Stand,       # STAND
                          b'ZoomIn' : self.Sit,          # SIT
-                         #b'WaveRight' : "",             # WAVE RIGHT
-                         #b'WaveLeft' : "",              # WAVE LEFT
+                         b'WaveRight' : self.WaveRight, # WAVE RIGHT
+                         b'WaveLeft' : self.WaveLeft,   # WAVE LEFT
                          #b'ZoomOut' : "",               # MOVE FORWARD
                          #b'SwipeLeft' : "",             # MOVE/TURN LEFT
                          #b'SwipeRight' : "",            # MOVE/TURN RIGHT
@@ -69,6 +108,10 @@ class Nao:
         self.Set("Stand")
     def Sit(self):
         self.Set("Sit")
+    def WaveRight(self):
+        self.Wave("right")
+    def WaveLeft(self):
+        self.Wave("left")
 
 	
 
