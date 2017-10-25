@@ -35,7 +35,7 @@ class Nao:
     def StiffnessOff(self):
         self.motionProxy.setStiffnesses("Body", 0.0) #vypnutie motorov		
     def Set(self,command):
-        self.postureProxy.post.goToPosture(command, 0.5)	#Stand
+        self.postureProxy.goToPosture(command, 0.5)	#Stand
 													        #StandInit
 													        #StandZero
 													        #Crouch
@@ -100,11 +100,11 @@ class Nao:
                          b'WaveRight' : self.WaveRight, # WAVE RIGHT
                          b'WaveLeft' : self.WaveLeft,   # WAVE LEFT
                          b'ZoomOut' : self.MoveForward,   # MOVE FORWARD
-                         #b'SwipeLeft' : "",             # MOVE/TURN LEFT
-                         #b'SwipeRight' : "",            # MOVE/TURN RIGHT
+                         b'SwipeLeft' : self.TurnLeft,             # MOVE/TURN LEFT
+                         b'SwipeRight' : self.TurnRight,            # MOVE/TURN RIGHT
         }
     def	Stop(self):
-        self.self.motionProxy.stopMove()
+        self.motionProxy.stopMove()
         isWalking=False
     def Stand(self):
         self.Stop()
@@ -113,14 +113,22 @@ class Nao:
         self.Stop()
         self.Set("Sit")
     def WaveRight(self):
-        self.Stop()
         self.Wave("right")
     def WaveLeft(self):
-        self.Stop()
         self.Wave("left")
     def MoveForward(self):
         self.Move(1.5)
-
+        isWalking=True
+    def TurnLeft()
+        if isWalking
+            self.moveTo(1,0,-90)
+        else:
+            self.moveTo(0,0,-90)
+    def TurnRight()
+        if isWalking
+            self.moveTo(1,0,90)
+        else:
+            self.moveTo(0,0,90)
 
 
 	
