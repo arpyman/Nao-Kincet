@@ -32,35 +32,6 @@ namespace KinectGestures
         {
             InitializeComponent();
 
-            string url = @"http://naokinect.azurewebsites.net/Data?sending=";
-            string data = "test222";
-            WebRequest.Create(url+data).GetResponse();
-
-            /*
-            WebRequest wrGETURL;
-            wrGETURL = WebRequest.Create(url);
-            
-            using (Stream objStream = wrGETURL.GetResponse().GetResponseStream())
-            {
-                using (StreamReader objReader = new StreamReader(objStream))
-                {
-                    string sLine = "";
-                    int i = 0;
-
-                    while (sLine != null)
-                    {
-                        i++;
-                        sLine = objReader.ReadLine();
-                        if (sLine != null)
-                            Console.WriteLine("{0}:{1}", i, sLine);
-                    }
-                    Console.ReadLine();
-                }                    
-            }
-            */
-
-
-
             // Initialize
             sensor = KinectSensor.GetDefault();
             if (sensor != null)
@@ -102,7 +73,39 @@ namespace KinectGestures
 
         void GestureController_GestureRecognized(object sender, GestureEventArgs e)
         {
-            tblGestures.Text = e.GestureType.ToString();
+            string gesture = e.GestureType.ToString();
+            tblGestures.Text = gesture;
+            //SendData(gesture);
+        }
+
+        void SendData()
+        {
+            string url = @"http://naokinect.azurewebsites.net/Data?sending=";
+            string data = "test222";
+            WebRequest.Create(url + data).GetResponse();
+
+            /*
+            WebRequest wrGETURL;
+            wrGETURL = WebRequest.Create(url);
+            
+            using (Stream objStream = wrGETURL.GetResponse().GetResponseStream())
+            {
+                using (StreamReader objReader = new StreamReader(objStream))
+                {
+                    string sLine = "";
+                    int i = 0;
+
+                    while (sLine != null)
+                    {
+                        i++;
+                        sLine = objReader.ReadLine();
+                        if (sLine != null)
+                            Console.WriteLine("{0}:{1}", i, sLine);
+                    }
+                    Console.ReadLine();
+                }                    
+            }
+            */
         }
     }
 }
