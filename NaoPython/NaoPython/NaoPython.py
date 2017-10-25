@@ -13,8 +13,10 @@ def main():
     while 1:
         try:
             r = requests.get(data_url)
-            nao.Commands[r.content]()
             print(r.content)
+            if(r.content != "0"):
+                nao.Commands[r.content]()
+                r = requests.get(data_url + "?sending=0")
             time.sleep(0.1)
         except Exception, e:
             print("Error: " + str(e))
@@ -23,12 +25,12 @@ def main():
 
 
 class Nao:
-    isWalking=False
     def __init__(self, robot_ip):
         self.DefineCommands()
         self.postureProxy = ALProxy("ALRobotPosture", robot_ip, 9559)	#Positions
         self.motionProxy = ALProxy("ALMotion", robot_ip, 9559)	#Move
         self.tts = ALProxy("ALTextToSpeech", robot_ip , 9559)	#Say
+        self.isWalking=False
 	
     def StiffnessOn(self):
         self.motionProxy.setStiffnesses("Body", 1.0)  #zaseknutie klbov (aby sa mohol hybat)
@@ -94,18 +96,18 @@ class Nao:
 
     # Dictionary commands
     def DefineCommands(self):
-        self.Commands = {b'JoinedHands' : self.Stop,    # STOP
-                         b'SwipeUp' : self.Stand,       # STAND
-                         b'ZoomIn' : self.Sit,          # SIT
-                         b'WaveRight' : self.WaveRight, # WAVE RIGHT
-                         b'WaveLeft' : self.WaveLeft,   # WAVE LEFT
-                         b'ZoomOut' : self.MoveForward,   # MOVE FORWARD
-                         b'SwipeLeft' : self.TurnLeft,             # MOVE/TURN LEFT
-                         b'SwipeRight' : self.TurnRight,            # MOVE/TURN RIGHT
+        self.Commands = {b'JoinedHands' : self.Stop,     # STOP
+                         b'SwipeUp' : self.Stand,        # STAND
+                         b'ZoomIn' : self.Sit,           # SIT
+                         b'WaveRight' : self.WaveRight,  # WAVE RIGHT
+                         b'WaveLeft' : self.WaveLeft,    # WAVE LEFT
+                         b'ZoomOut' : self.MoveForward,  # MOVE FORWARD
+                         b'SwipeLeft' : self.TurnLeft,   # MOVE/TURN LEFT
+                         b'SwipeRight' : self.TurnRight, # MOVE/TURN RIGHT
         }
     def	Stop(self):
         self.motionProxy.stopMove()
-        isWalking=False
+        self.isWalking=False
     def Stand(self):
         self.Stop()
         self.Set("Stand")
@@ -118,17 +120,19 @@ class Nao:
         self.Wave("left")
     def MoveForward(self):
         self.Move(1.5)
-        isWalking=True
-    def TurnLeft()
-        if isWalking
-            self.moveTo(1,0,-90)
+        self.isWalking=True
+    def TurnLeft(self):
+        if self.isWalking:
+            self.Stop() # mozno inak
+            self.MoveTo(2,1,1.4)
         else:
-            self.moveTo(0,0,-90)
-    def TurnRight()
-        if isWalking
-            self.moveTo(1,0,90)
+            self.MoveTo(0,0,3.14)
+    def TurnRight(self):
+        if self.isWalking:
+            self.Stop()
+            self.MoveTo(2,-1,-1.4)
         else:
-            self.moveTo(0,0,90)
+            self.MoveTo(0,0,-3.14)
 
 
 	
