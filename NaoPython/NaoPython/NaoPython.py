@@ -23,6 +23,7 @@ def main():
 
 
 class Nao:
+    isWalking=False
     def __init__(self, robot_ip):
         self.DefineCommands()
         self.postureProxy = ALProxy("ALRobotPosture", robot_ip, 9559)	#Positions
@@ -46,9 +47,9 @@ class Nao:
         self.motionProxy.moveInit()
         self.motionProxy.post.moveTo(kolko, 0, 0)
 
-    def MoveTo(self,kolko,x,y):
+    def MoveTo(self,kolko,y,uhol):
         self.motionProxy.moveInit()
-        self.motionProxy.post.moveTo(kolko, x, y)
+        self.motionProxy.post.moveTo(kolko, y, uhol)
 
     def Say(self,text):
         self.tts.say(text)
@@ -98,20 +99,29 @@ class Nao:
                          b'ZoomIn' : self.Sit,          # SIT
                          b'WaveRight' : self.WaveRight, # WAVE RIGHT
                          b'WaveLeft' : self.WaveLeft,   # WAVE LEFT
-                         #b'ZoomOut' : "",               # MOVE FORWARD
+                         b'ZoomOut' : self.MoveForward,   # MOVE FORWARD
                          #b'SwipeLeft' : "",             # MOVE/TURN LEFT
                          #b'SwipeRight' : "",            # MOVE/TURN RIGHT
         }
     def	Stop(self):
         self.self.motionProxy.stopMove()
+        isWalking=False
     def Stand(self):
+        self.Stop()
         self.Set("Stand")
     def Sit(self):
+        self.Stop()
         self.Set("Sit")
     def WaveRight(self):
+        self.Stop()
         self.Wave("right")
     def WaveLeft(self):
+        self.Stop()
         self.Wave("left")
+    def MoveForward(self):
+        self.Move(1.5)
+
+
 
 	
 
