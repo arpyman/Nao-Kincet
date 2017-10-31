@@ -73,15 +73,28 @@ namespace KinectGestures
 
         void GestureController_GestureRecognized(object sender, GestureEventArgs e)
         {
+            //Gestures:
+            //  JoinedHands	 0	 Hands joined in front of chest.
+            //  WaveRight    1   Waving using the right hand.
+            //  WaveLeft     2   Waving using the left hand.
+            //  -------                     
+            //  SwipeLeft    4   Hand moved horizontally from right to left.
+            //  SwipeRight   5   Hand moved horizontally from left to right.
+            //  SwipeUp      6   Hand moved vertically from hip center to head.
+            //  ------- 
+            //  ZoomIn       8   Both hands extended closer to the chest.
+            //  ZoomOut      9	 Both hands extended farther from the chest.
+
+            // Menu         3   Hand slightly bent above hip(XBOX - like gesture).
+            // SwipeDown    7   Hand moved vertically from head to hip center.
             string gesture = e.GestureType.ToString();
             tblGestures.Text = gesture;
             //SendData(gesture);
         }
 
-        void SendData()
+        void SendData(string data)
         {
-            string url = @"http://naokinect.azurewebsites.net/Data?sending=";
-            string data = "test222";
+            string url = @"http://naokinect.azurewebsites.net/Data?sending=" + data;
             WebRequest.Create(url + data).GetResponse();
 
             /*

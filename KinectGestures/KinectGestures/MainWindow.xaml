@@ -6,21 +6,24 @@
         xmlns:controls="clr-namespace:LightBuzz.Vitruvius.Controls;assembly=LightBuzz.Vitruvius"
         xmlns:local="clr-namespace:KinectGestures"
         mc:Ignorable="d"
-        Title="MainWindow" Height="350" Width="525">
+        Title="Kinect Gesture Detector" Height="776" Width="1600" ResizeMode="CanMinimize">
 
     <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="60"/>
-            <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="148*"/>
+            <ColumnDefinition Width="369*"/>
+        </Grid.ColumnDefinitions>
 
-        <Grid Grid.Row="0">
-            <TextBlock x:Name="tblGestures" Text="-" Grid.Column="1" 
-                       IsHitTestVisible="false" TextWrapping="NoWrap" TextAlignment="Center" VerticalAlignment="Center" Margin="0,0,20,0" FontSize="72" />
-        </Grid>
 
-        <Grid Grid.Row="1">
-            <controls:KinectViewer x:Name="viewer" />
-        </Grid>
+        <TextBlock x:Name="tblGestures" Text="- - - - -" IsHitTestVisible="false" TextWrapping="NoWrap" TextAlignment="Center" VerticalAlignment="Top" Margin="281,16,0,0" FontSize="24" Height="40" Grid.Column="1" HorizontalAlignment="Left" Width="213" TextDecorations="{x:Null}" />
+
+        <StackPanel Orientation="Horizontal" Grid.Column="1" Grid.RowSpan="2">
+            <Separator Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" Width="1" />
+        </StackPanel>
+
+        <controls:KinectViewer x:Name="viewer" Grid.Column="1" Margin="10,57,10,10" />
+        <Label Content="Last detected gesture:" Grid.Column="1" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" FontSize="24" FontWeight="Bold"/>
+        <Image HorizontalAlignment="Left" Margin="10" VerticalAlignment="Top" Source="gestures.png" Stretch="Fill"/>
+
     </Grid>
 </Window>
