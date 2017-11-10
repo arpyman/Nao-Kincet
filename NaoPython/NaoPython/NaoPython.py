@@ -3,18 +3,21 @@ import requests
 import time
 
 def main():
-    #robot_ip = "192.168.0.110"
-    robot_ip = "127.0.0.1"
+    robot_ip = "192.168.0.108"
+    #robot_ip = "127.0.0.1"
     data_url = "http://naokinect.azurewebsites.net/Data"
 
     nao = Nao(robot_ip)
     nao.StiffnessOn()
 
+    r = requests.get(data_url + "?sending=0")
+    print("Ready")
+
     while 1:
         try:
             r = requests.get(data_url)
-            print(r.content)
             if(r.content != "0"):
+                print(r.content)
                 nao.Commands[r.content]()
                 r = requests.get(data_url + "?sending=0")
             time.sleep(0.1)
@@ -31,7 +34,8 @@ class Nao:
         self.motionProxy = ALProxy("ALMotion", robot_ip, 9559)	#Move
         self.tts = ALProxy("ALTextToSpeech", robot_ip , 9559)	#Say
         self.isWalking=False
-	
+        self.isSitting = True
+
     def StiffnessOn(self):
         self.motionProxy.setStiffnesses("Body", 1.0)  #zaseknutie klbov (aby sa mohol hybat)
     def StiffnessOff(self):
@@ -46,6 +50,8 @@ class Nao:
 													        #LyingBelly
 													        #LyingBack	
     def Move(self,kolko):	#v metroch
+        if (self.isSitting):
+            self.Stand()
         self.motionProxy.moveInit()
         self.motionProxy.post.moveTo(kolko, 0, 0)
 
@@ -98,10 +104,10 @@ class Nao:
     def DefineCommands(self):
         self.Commands = {b'JoinedHands' : self.Stop,     # STOP
                          b'SwipeUp' : self.Stand,        # STAND
-                         b'ZoomIn' : self.Sit,           # SIT
+                         b'ZoomIn' : self.MoveForward,   # MOVE FORWARD  
                          b'WaveRight' : self.WaveRight,  # WAVE RIGHT
                          b'WaveLeft' : self.WaveLeft,    # WAVE LEFT
-                         b'ZoomOut' : self.MoveForward,  # MOVE FORWARD
+                         b'ZoomOut' : self.Sit,          # SIT
                          b'SwipeLeft' : self.TurnLeft,   # MOVE/TURN LEFT
                          b'SwipeRight' : self.TurnRight, # MOVE/TURN RIGHT
         }
@@ -111,9 +117,11 @@ class Nao:
     def Stand(self):
         self.Stop()
         self.Set("Stand")
+        self.isSitting = False
     def Sit(self):
         self.Stop()
         self.Set("Sit")
+        self.isSitting = True
     def WaveRight(self):
         self.Wave("right")
     def WaveLeft(self):
@@ -124,18 +132,17 @@ class Nao:
     def TurnLeft(self):
         if self.isWalking:
             self.Stop() # mozno inak
-            self.MoveTo(2,1,1.4)
+            self.MoveTo(0.5,0.5,1.57)
         else:
             self.MoveTo(0,0,3.14)
     def TurnRight(self):
         if self.isWalking:
             self.Stop()
-            self.MoveTo(2,-1,-1.4)
+            self.MoveTo(0.5,-0.5,-1.57)
         else:
             self.MoveTo(0,0,-3.14)
 
 
-	
 
 
 if __name__ == "__main__":

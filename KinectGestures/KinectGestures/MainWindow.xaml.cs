@@ -88,16 +88,16 @@ namespace KinectGestures
             // Menu         3   Hand slightly bent above hip(XBOX - like gesture).
             // SwipeDown    7   Hand moved vertically from head to hip center.
             string gesture = e.GestureType.ToString();
-            tblGestures.Text = gesture;
-            //SendData(gesture);
+            tblGestures.Text = gesture.ToString();
+            SendData(gesture.ToString());
         }
 
         void SendData(string data)
         {
             string url = @"http://naokinect.azurewebsites.net/Data?sending=" + data;
-            WebRequest.Create(url + data).GetResponse();
+            //WebRequest.Create(url).GetResponseAsync();
 
-            /*
+            
             WebRequest wrGETURL;
             wrGETURL = WebRequest.Create(url);
             
@@ -118,7 +118,7 @@ namespace KinectGestures
                     Console.ReadLine();
                 }                    
             }
-            */
+            
         }
     }
 }
