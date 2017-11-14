@@ -16,6 +16,7 @@ using LightBuzz.Vitruvius;
 using Microsoft.Kinect;
 using System.Net;
 using System.IO;
+using System.Diagnostics;
 
 namespace KinectGestures
 {
@@ -54,6 +55,7 @@ namespace KinectGestures
             {
                 if (frame != null && viewer.Visualization == Visualization.Color)
                 {
+                    viewer.Clear();
                     viewer.Image = frame.ToBitmap();
                 }
             }
@@ -66,6 +68,7 @@ namespace KinectGestures
                     if (body != null)
                     {
                         gestureController.Update(body);
+                        viewer.DrawBody(body);
                     }
                 }
             }
@@ -77,16 +80,13 @@ namespace KinectGestures
             //  JoinedHands	 0	 Hands joined in front of chest.
             //  WaveRight    1   Waving using the right hand.
             //  WaveLeft     2   Waving using the left hand.
-            //  -------                     
+            //  Menu         3   Hand slightly bent above hip(XBOX - like gesture).
             //  SwipeLeft    4   Hand moved horizontally from right to left.
             //  SwipeRight   5   Hand moved horizontally from left to right.
             //  SwipeUp      6   Hand moved vertically from hip center to head.
-            //  ------- 
+            //  SwipeDown    7   Hand moved vertically from head to hip center.
             //  ZoomIn       8   Both hands extended closer to the chest.
             //  ZoomOut      9	 Both hands extended farther from the chest.
-
-            // Menu         3   Hand slightly bent above hip(XBOX - like gesture).
-            // SwipeDown    7   Hand moved vertically from head to hip center.
             string gesture = e.GestureType.ToString();
             tblGestures.Text = gesture.ToString();
             SendData(gesture.ToString());

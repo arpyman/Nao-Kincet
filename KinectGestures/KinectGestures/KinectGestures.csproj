@@ -37,9 +37,6 @@
     <StartupObject />
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="LightBuzz.Vitruvius">
-      <HintPath>.\LightBuzz.Vitruvius.dll</HintPath>
-    </Reference>
     <Reference Include="Microsoft.Kinect, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>.\Microsoft.Kinect.dll</HintPath>
@@ -105,6 +102,12 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="gestures.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\LightBuzz.Vitruvius\LightBuzz.Vitruvius.csproj">
+      <Project>{89e39683-d56d-4604-971b-587c22c62934}</Project>
+      <Name>LightBuzz.Vitruvius</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

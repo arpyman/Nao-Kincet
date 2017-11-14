@@ -3,7 +3,7 @@ import requests
 import time
 
 def main():
-    robot_ip = "192.168.0.108"
+    robot_ip = "192.168.0.123"
     #robot_ip = "127.0.0.1"
     data_url = "http://naokinect.azurewebsites.net/Data"
 
@@ -103,13 +103,14 @@ class Nao:
     # Dictionary commands
     def DefineCommands(self):
         self.Commands = {b'JoinedHands' : self.Stop,     # STOP
-                         b'SwipeUp' : self.Stand,        # STAND
-                         b'ZoomIn' : self.MoveForward,   # MOVE FORWARD  
                          b'WaveRight' : self.WaveRight,  # WAVE RIGHT
                          b'WaveLeft' : self.WaveLeft,    # WAVE LEFT
-                         b'ZoomOut' : self.Sit,          # SIT
+                         b'Menu' : self.LyingBack,       # LYING BACK
+                         b'SwipeUp' : self.Stand,        # STAND
+                         b'SwipeDown' : self.Sit,        # SIT
                          b'SwipeLeft' : self.TurnLeft,   # MOVE/TURN LEFT
                          b'SwipeRight' : self.TurnRight, # MOVE/TURN RIGHT
+                         b'ZoomIn' : self.MoveForward,   # MOVE FORWARD 
         }
     def	Stop(self):
         self.motionProxy.stopMove()
@@ -121,6 +122,10 @@ class Nao:
     def Sit(self):
         self.Stop()
         self.Set("Sit")
+        self.isSitting = True
+    def LyingBack(self):
+        self.Stop()
+        self.Set("LyingBack")
         self.isSitting = True
     def WaveRight(self):
         self.Wave("right")
@@ -141,8 +146,6 @@ class Nao:
             self.MoveTo(0.5,-0.5,-1.57)
         else:
             self.MoveTo(0,0,-3.14)
-
-
 
 
 if __name__ == "__main__":
