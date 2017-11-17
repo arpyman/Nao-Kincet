@@ -3,26 +3,28 @@ import requests
 import time
 
 def main():
-    robot_ip = "192.168.0.123"
-    #robot_ip = "127.0.0.1"
+    #robot_ip = "192.168.0.123"
+    robot_ip = "127.0.0.1"
     data_url = "http://naokinect.azurewebsites.net/Data"
+    ready_string = "Ready"
 
     nao = Nao(robot_ip)
     nao.StiffnessOn()
 
-    r = requests.get(data_url + "?sending=0")
-    print("Ready")
+    r = requests.post(data_url, data={'data': ready_string})
+    print(ready_string)
 
     while 1:
         try:
             r = requests.get(data_url)
-            if(r.content != "0"):
+            if(r.content != ready_string):
                 print(r.content)
                 nao.Commands[r.content]()
-                r = requests.get(data_url + "?sending=0")
+                r = requests.post(data_url, data={'data': ready_string})
             time.sleep(0.1)
         except Exception, e:
             print("Error: " + str(e))
+            r = requests.post(data_url, data={'data': ready_string})
             time.sleep(1)
 
 

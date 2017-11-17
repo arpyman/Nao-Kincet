@@ -11,16 +11,19 @@ namespace NaoKinectWebApp
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-            string gesture = Request.QueryString["sending"]; // Receive gesture from Kinect app
-            if (gesture == null)
+            if (HttpContext.Current.Request.HttpMethod == "POST")
+            {
+                string incoming = Request.Form["data"]; // Receive Data from data variable
+                if (incoming != null)
+                {
+                    GlobalStorage.Gesture = incoming;
+                    Response.Write("Data saved");
+                    Response.End();
+                }
+            }
+            if (HttpContext.Current.Request.HttpMethod == "GET")
             {
                 Response.Write(GlobalStorage.Gesture);
-                Response.End();
-            }
-            else
-            {
-                GlobalStorage.Gesture = gesture;
-                Response.Write("Gesture saved");
                 Response.End();
             }
         }

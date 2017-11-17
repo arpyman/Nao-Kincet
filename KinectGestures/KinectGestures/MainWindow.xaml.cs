@@ -17,6 +17,7 @@ using Microsoft.Kinect;
 using System.Net;
 using System.IO;
 using System.Diagnostics;
+using System.Collections.Specialized;
 
 namespace KinectGestures
 {
@@ -92,33 +93,21 @@ namespace KinectGestures
             SendData(gesture.ToString());
         }
 
-        void SendData(string data)
+        void SendData(string data) // Send data using HTTP POST
         {
-            string url = @"http://naokinect.azurewebsites.net/Data?sending=" + data;
-            //WebRequest.Create(url).GetResponseAsync();
+            string url = @"http://naokinect.azurewebsites.net/Data";
 
-            
-            WebRequest wrGETURL;
-            wrGETURL = WebRequest.Create(url);
-            
-            using (Stream objStream = wrGETURL.GetResponse().GetResponseStream())
+            using (WebClient client = new WebClient())
             {
-                using (StreamReader objReader = new StreamReader(objStream))
+                byte[] response = client.UploadValues(url, new NameValueCollection()
                 {
-                    string sLine = "";
-                    int i = 0;
+                    { "data", data },
+                });
 
-                    while (sLine != null)
-                    {
-                        i++;
-                        sLine = objReader.ReadLine();
-                        if (sLine != null)
-                            Console.WriteLine("{0}:{1}", i, sLine);
-                    }
-                    Console.ReadLine();
-                }                    
+                string result = System.Text.Encoding.UTF8.GetString(response);
+                Debug.WriteLine(result);
             }
-            
+
         }
     }
 }
