@@ -6,12 +6,12 @@
         xmlns:controls="clr-namespace:LightBuzz.Vitruvius.Controls;assembly=LightBuzz.Vitruvius"
         xmlns:local="clr-namespace:KinectGestures"
         mc:Ignorable="d"
-        Title="Kinect Gesture Detector" Height="776" Width="1600" ResizeMode="CanMinimize">
+        Title="Kinect Gesture Detector" Height="786" Width="1810" ResizeMode="CanMinimize">
 
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="148*"/>
-            <ColumnDefinition Width="369*"/>
+            <ColumnDefinition Width="250*"/>
         </Grid.ColumnDefinitions>
 
 
@@ -23,7 +23,7 @@
 
         <controls:KinectViewer x:Name="viewer" Grid.Column="1" Margin="10,57,10,10" />
         <Label Content="Last detected gesture:" Grid.Column="1" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" FontSize="24" FontWeight="Bold"/>
-        <Image HorizontalAlignment="Left" Margin="10" VerticalAlignment="Top" Source="gestures.png" Stretch="Fill"/>
+        <Image HorizontalAlignment="Left" Margin="10" VerticalAlignment="Top" Source="gestures.png" Stretch="Fill" Width="647" Height="727"/>
 
     </Grid>
 </Window>
