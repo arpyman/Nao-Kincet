@@ -18,6 +18,7 @@ using System.Net;
 using System.IO;
 using System.Diagnostics;
 using System.Collections.Specialized;
+using System.Net.Http;
 
 namespace KinectGestures
 {
@@ -90,22 +91,19 @@ namespace KinectGestures
             //  ZoomOut      9	 Both hands extended farther from the chest.
             string gesture = e.GestureType.ToString();
             tblGestures.Text = gesture.ToString();
-            SendData(gesture.ToString());
+            Task.Run(() => SendData(gesture.ToString())); 
         }
 
-        void SendData(string data) // Send data using HTTP POST
+        static async Task SendData(string data) // Send data using HTTP POST
         {
-            string url = @"http://naokinect.azurewebsites.net/Data";
+            Uri uri = new Uri(@"http://naokinect.azurewebsites.net/Data");
 
-            using (WebClient client = new WebClient())
+            using (HttpClient client = new HttpClient())
             {
-                byte[] response = client.UploadValues(url, new NameValueCollection()
-                {
-                    { "data", data },
-                });
-
-                string result = System.Text.Encoding.UTF8.GetString(response);
-                Debug.WriteLine(result);
+                var content = new FormUrlEncodedContent(new[] { new KeyValuePair<string, string>("data", data) });
+                var result = await client.PostAsync(uri, content);
+                string resultContent = await result.Content.ReadAsStringAsync();
+                Debug.WriteLine(resultContent);
             }
 
         }
